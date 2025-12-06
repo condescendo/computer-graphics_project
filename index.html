@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graphics Systems Architecture | Portfolio</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Libre+Franklin:wght@500;700;900&display=swap" rel="stylesheet">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-twilight.min.css" rel="stylesheet" />
+
+    <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        :root {
+            /* --- Industrial Dark Palette (From Uploaded File) --- */
+            --bg-body: #050505;          
+            --grid-line: rgba(255, 255, 255, 0.07); 
+            --bg-card: #111111;          
+            --text-primary: #eeeeee;     
+            --text-secondary: #888888;   
+            
+            /* --- ACCENT COLOR --- */
+            --accent: #00ff9d; 
+            
+            --border-color: #2a2a2a;     
+            --code-bg: #080808;          
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background-color: var(--bg-body);
+            background-image: 
+                linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+                linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+            background-size: 40px 40px; 
+            background-attachment: fixed; 
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 4rem 0;
+        }
+
+        .container {
+            background-color: var(--bg-card);
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 5rem 3rem;
+            border: 1px solid var(--border-color);
+            position: relative;
+            width: 95%;
+        }
+
+        section { margin-bottom: 5rem; }
+
+        /* --- Typography --- */
+        header { 
+            margin-bottom: 5rem; 
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        h1 {
+            font-family: 'Libre Franklin', sans-serif;
+            font-size: 3rem;
+            font-weight: 900;
+            letter-spacing: -0.04em;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+            color: #ffffff;
+            line-height: 1.1;
+        }
+
+        .subtitle {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.1rem;
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+        h2 {
+            font-family: 'Libre Franklin', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border-top: 1px solid var(--border-color);
+            padding-top: 2rem;
+        }
+        
+        /* Decorative square before H2 */
+        h2::before {
+            content: '';
+            width: 12px;
+            height: 12px;
+            background: var(--accent);
+            display: block;
+        }
+
+        h3 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+        }
+
+        p {
+            margin-bottom: 1.25rem;
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+        }
+        
+        strong { color: var(--text-primary); font-weight: 600; }
+
+        /* --- Lists --- */
+        ul {
+            list-style: none;
+            margin-bottom: 2rem;
+            border-left: 2px solid var(--border-color);
+            padding-left: 1.5rem;
+        }
+
+        ul li {
+            position: relative;
+            margin-bottom: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        ul li strong {
+            color: var(--text-primary);
+        }
+
+        ul li::before {
+            content: "▹";
+            position: absolute;
+            left: -1.5rem;
+            color: var(--accent);
+            font-family: monospace;
+        }
+
+        /* --- Code Blocks --- */
+        pre[class*="language-"] {
+            background: var(--code-bg) !important;
+            border: 1px solid var(--border-color);
+            margin: 0.5rem 0 2rem 0;
+            font-size: 0.85rem !important;
+            overflow-x: auto; 
+            text-shadow: none !important;
+        }
+        
+        .code-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--accent);
+            display: inline-block;
+            margin-top: 1.5rem;
+            margin-bottom: 0.2rem;
+            border: 1px solid var(--border-color);
+            padding: 2px 8px;
+            background: var(--bg-body);
+        }
+
+        /* --- Media/Diagram Wrappers --- */
+        .media-wrapper {
+            margin: 2rem 0;
+            border: 1px solid var(--border-color);
+            background: #000;
+            padding: 4px;
+            text-align: center;
+        }
+
+        /* Placeholder style for when images aren't loaded yet */
+        .diagram-placeholder {
+            padding: 3rem;
+            color: var(--text-secondary);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            background: radial-gradient(circle, #1a1a1a 0%, #000 100%);
+        }
+
+        .caption {
+            padding: 0.75rem;
+            background: var(--bg-card);
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* --- Tech Stack Tags --- */
+        .stack-container { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
+        .tech-tag {
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 0.2rem 0.6rem;
+            font-size: 0.75rem;
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--bg-body);
+        }
+
+        /* --- Footer --- */
+        footer {
+            margin-top: 4rem;
+            padding-top: 3rem;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .container { width: 100%; border: none; padding: 2rem 1.5rem; }
+            h1 { font-size: 2rem; }
+            footer { flex-direction: column; gap: 1rem; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <header>
+            <h1>Graphics Systems<br>Architecture</h1>
+            <div class="subtitle">A Progressive C++ & GLSL Engine</div>
+            
+            <div class="stack-container">
+                <span class="tech-tag">C++ 17</span>
+                <span class="tech-tag">OpenGL 4.5</span>
+                <span class="tech-tag">GLSL</span>
+                <span class="tech-tag">Qt</span>
+                <span class="tech-tag">Monte Carlo</span>
+            </div>
+        </header>
+
+        <section id="executive-summary">
+            <h3>// Executive Summary</h3>
+            <p>This project deconstructs the modern graphics pipeline. Instead of relying on a single API, I built the engine in distinct stages to master both <strong>Serial (CPU)</strong> and <strong>Parallel (GPU)</strong> architectures. It evolves from a manual C++ software rasterizer (managing raw memory and linear algebra) to a hardware-accelerated Monte Carlo Path Tracer.</p>
+        </section>
+
+        <section id="phase-1">
+            <h2>Phase I: The Software GPU</h2>
+            <p><strong>Focus:</strong> Memory Management, Linear Algebra, & Fixed-Function Logic</p>
+            <p>Before touching OpenGL, I implemented the rendering pipeline in pure C++. This demonstrated a systems-level understanding of how vertex data becomes pixels without driver abstraction.</p>
+
+            <div class="media-wrapper">
+                <div class="diagram-placeholder">
+                                    </div>
+                <div class="caption">Figure 1: Custom Barycentric Rasterization Pipeline</div>
+            </div>
+
+            <ul>
+                <li><strong>Barycentric Rasterization:</strong> Implemented a custom triangle traversal algorithm using edge functions ($\alpha, \beta, \gamma$) for sub-pixel precision.</li>
+                <li><strong>Memory Optimization:</strong> Replaced naive "Triangle Soup" data with <strong>Indexed Face Sets</strong>, decoupling topology from geometry.</li>
+                <li><strong>Signal Processing:</strong> Implemented surface smoothing algorithms to approximate vertex normals from faceted geometry.</li>
+            </ul>
+
+            <span class="code-label">raster2d.cpp / Rasterization Kernel</span>
+            <pre><code class="language-cpp">// Determines if a pixel lies inside a triangle
+void triangle(float x0, float y0, ... float x2, float y2) {
+    // Optimization: Bounding Box Pruning
+    int minX = std::max(0, (int)floor(std::min({x0, x1, x2})));
+    int maxX = std::min(width-1, (int)ceil(std::max({x0, x1, x2})));
+
+    for (int y = minY; y <= maxY; ++y) {
+        for (int x = minX; x <= maxX; ++x) {
+            // Edge Functions (Cross Products)
+            float w0 = orient2d(x1, y1, x2, y2, x, y);
+            float w1 = orient2d(x2, y2, x0, y0, x, y);
+            float w2 = orient2d(x0, y0, x1, y1, x, y);
+
+            // Atomic pixel write if inside
+            if (w0 >= 0 && w1 >= 0 && w2 >= 0) image.put(x, y, color);
+        }
+    }
+}</code></pre>
+        </section>
+
+        <section id="phase-2">
+            <h2>Phase II: Parallel Compute & Volumetrics</h2>
+            <p><strong>Focus:</strong> SIMD Architecture, Implicit Geometry, & CSG</p>
+            <p>Transitioning to the GPU, I moved from explicit meshes to <strong>Implicit Surfaces</strong> defined by Signed Distance Fields (SDFs). This required writing GLSL fragment shaders to perform ray-marching.</p>
+            
+            <div class="media-wrapper">
+                <div class="diagram-placeholder">
+                                   </div>
+                <div class="caption">Figure 2: Sphere Tracing Distance Fields</div>
+            </div>
+
+            <ul>
+                <li><strong>Sphere Tracing:</strong> Implemented a ray-marching loop that steps along rays based on distance-to-scene, enabling real-time rendering of mathematical volumes.</li>
+                <li><strong>Constructive Solid Geometry (CSG):</strong> Implemented runtime boolean operators (Union, Intersection, Subtraction).</li>
+            </ul>
+
+            <span class="code-label">enterprise.glsl / Ray Marching Loop</span>
+            <pre><code class="language-glsl">Dist raymarch(Ray r) {
+    float t = 0.0;
+    for(int i = 0; i < MAX_STEPS; i++) {
+        vec3 pos = r.o + r.d * t;
+        Dist hit = mapWorld(pos); // Query SDF Scene Graph
+
+        if(hit.dist < EPSILON) return Dist(hit.id, t);
+
+        // Optimization: Step forward safely
+        t += hit.dist; 
+    }
+    return Dist(-1, INFINITY);
+}</code></pre>
+        </section>
+
+        <section id="phase-3">
+            <h2>Phase III: Stochastic Simulation</h2>
+            <p><strong>Focus:</strong> Physics Simulation, Probability Theory, & Light Transport</p>
+            <p>The final stage implements a <strong>Monte Carlo Path Tracer</strong>. Unlike the approximate rasterizer, this simulates the physical behavior of light by solving the Rendering Equation statistically.</p>
+
+            <div class="media-wrapper">
+                <div class="diagram-placeholder">
+                                    </div>
+                <div class="caption">Figure 3: Global Illumination via Path Tracing</div>
+            </div>
+
+            <ul>
+                <li><strong>Global Illumination:</strong> Simulates indirect light transport (color bleeding) by recursively bouncing rays based on surface BSDFs.</li>
+                <li><strong>Importance Sampling:</strong> Optimized convergence speed by biasing random ray generation towards high-energy light sources.</li>
+                <li><strong>Physical Camera:</strong> Implemented a Thin Lens model to simulate real-world aperture optics.</li>
+            </ul>
+
+            <span class="code-label">trace.glsl / Light Transport Integrator</span>
+            <pre><code class="language-glsl">vec3 tracePath() {
+    vec3 throughput = vec3(1.0);
+    vec3 accumColor = vec3(0.0);
+
+    for (int bounce = 0; bounce < MAX_BOUNCES; ++bounce) {
+        Hit hit = intersectScene(ray);
+
+        // 1. Accumulate Emission
+        if (isEmitter(hit)) accumColor += hit.emission * throughput;
+
+        // 2. Russian Roulette / Importance Sampling
+        vec3 nextDir = sampleBSDF(ray.d, hit.normal, hit.material);
+        throughput *= evaluateBSDF(ray.d, nextDir, hit) / pdf;
+        
+        ray.o = hit.position + hit.normal * EPSILON;
+        ray.d = nextDir;
+    }
+    return accumColor;
+}</code></pre>
+        </section>
+
+        <section id="phase-4">
+            <h2>Phase IV: Hierarchical State</h2>
+            <p><strong>Focus:</strong> Kinematics & Linear Algebra</p>
+            <p>To manage scene complexity, I implemented a <strong>Scene Graph</strong> architecture. This handles the propagation of transformation matrices through parent-child relationships.</p>
+
+            <div class="media-wrapper">
+                <div class="diagram-placeholder">
+                                    </div>
+                <div class="caption">Figure 4: Kinematic Chain Propagation</div>
+            </div>
+
+            <ul>
+                <li><strong>Matrix Stacks:</strong> Managed nested coordinate systems (Sun $\to$ Earth $\to$ Moon) via matrix multiplication chains ($M_{world} = M_{parent} \times M_{local}$).</li>
+                <li><strong>Procedural Animation:</strong> Integrated parametric equations (Lissajous curves) to drive kinematic chains.</li>
+            </ul>
+
+            <span class="code-label">solarsystem.cpp / Hierarchical Transforms</span>
+            <pre><code class="language-cpp">// 1. Define Parent Frame (Earth Orbit)
+QMatrix4x4 earthFrame;
+earthFrame.rotate(earthOrbitSpeed * time, 0, 1, 0);
+earthFrame.translate(earthDistance, 0, 0);
+
+// 2. Render Child (Moon) relative to Parent
+QMatrix4x4 moonFrame = earthFrame; // Inherit Parent State
+moonFrame.rotate(moonOrbitSpeed * time, 0, 1, 0);
+moonFrame.translate(moonDistance, 0, 0);
+moonFrame.scale(moonSize);
+
+drawObject("sphere", "moon.png", moonFrame);</code></pre>
+        </section>
+
+        <footer>
+            <div>&copy; 2024 Graphics Systems Architecture</div>
+            <div>Generated for Portfolio</div>
+        </footer>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-glsl.min.js"></script>
+
+</body>
+</html>
